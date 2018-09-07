@@ -183,13 +183,13 @@ func (ap *actPool) AddTsf(tsf *action.Transfer) error {
 		return fmt.Errorf("existed transfer: %x", hash)
 	}
 	// Reject transfer if it fails validation
-	if err := ap.validateTsf(tsf); err != nil {
-		logger.Error().
-			Hex("hash", hash[:]).
-			Err(err).
-			Msg("Rejecting invalid transfer")
-		return err
-	}
+	//if err := ap.validateTsf(tsf); err != nil {
+	//logger.Error().
+	//Hex("hash", hash[:]).
+	//Err(err).
+	//Msg("Rejecting invalid transfer")
+	//return err
+	//}
 	// Reject transfer if pool space is full
 	if uint64(len(ap.allActions)) >= ap.cfg.MaxNumActsPerPool {
 		logger.Warn().
@@ -216,13 +216,13 @@ func (ap *actPool) AddVote(vote *action.Vote) error {
 		return fmt.Errorf("existed vote: %x", hash)
 	}
 	// Reject vote if it fails validation
-	if err := ap.validateVote(vote); err != nil {
-		logger.Error().
-			Hex("hash", hash[:]).
-			Err(err).
-			Msg("Rejecting invalid vote")
-		return err
-	}
+	//if err := ap.validateVote(vote); err != nil {
+	//logger.Error().
+	//Hex("hash", hash[:]).
+	//Err(err).
+	//Msg("Rejecting invalid vote")
+	//return err
+	//}
 	// Reject vote if pool space is full
 	if uint64(len(ap.allActions)) >= ap.cfg.MaxNumActsPerPool {
 		logger.Warn().
@@ -251,13 +251,13 @@ func (ap *actPool) AddExecution(exec *action.Execution) error {
 		return fmt.Errorf("existed execution: %x", hash)
 	}
 	// Reject transfer if it fails validation
-	if err := ap.validateExecution(exec); err != nil {
-		logger.Error().
-			Hex("hash", hash[:]).
-			Err(err).
-			Msg("Rejecting invalid execution")
-		return err
-	}
+	//if err := ap.validateExecution(exec); err != nil {
+	//logger.Error().
+	//Hex("hash", hash[:]).
+	//Err(err).
+	//Msg("Rejecting invalid execution")
+	//return err
+	//}
 	// Reject execution if pool space is full
 	if uint64(len(ap.allActions)) >= ap.cfg.MaxNumActsPerPool {
 		logger.Warn().
