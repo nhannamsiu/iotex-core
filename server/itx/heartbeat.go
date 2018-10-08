@@ -116,6 +116,8 @@ func (h *HeartbeatHandler) Log() {
 		actPoolSize := c.ActionPool().GetSize()
 		actPoolCapacity := c.ActionPool().GetCapacity()
 
+		root := c.Blockchain().GetFactory().RootHash()
+
 		logger.Info().
 			Int("rolldposEvents", numPendingEvts).
 			Str("fsmState", string(state)).
@@ -123,6 +125,7 @@ func (h *HeartbeatHandler) Log() {
 			Uint64("actpoolSize", actPoolSize).
 			Uint64("actpoolCapacity", actPoolCapacity).
 			Uint32("chainID", c.ChainID()).
+			Hex("factoryRoot", root[:]).
 			Msg("chain service status")
 
 		chainIDStr := strconv.FormatUint(uint64(c.ChainID()), 10)
