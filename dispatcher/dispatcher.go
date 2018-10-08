@@ -201,7 +201,7 @@ func (d *IotxDispatcher) handleActionMsg(m *actionMsg) {
 	if subscriber, ok := d.subscribers[m.ChainID()]; ok {
 		if err := subscriber.HandleAction(m.action); err != nil {
 			requestMtc.WithLabelValues("AddAction", "false").Inc()
-			logger.Debug().Err(err)
+			logger.Error().Err(err).Msg("Fail to handle the action")
 		}
 	} else {
 		logger.Info().Uint32("ChainID", m.ChainID()).Msg("No subscriber specified in the dispatcher")
