@@ -813,6 +813,11 @@ func (m *cFSM) processEndorseCommit(consensus bool) (fsm.State, error) {
 			Bool("consensus", consensus).
 			Msg("consensus did not reach")
 		consensusMtc.WithLabelValues("false").Inc()
+		if m.ctx.round.block != nil {
+			if err := m.ctx.chain.GetFactory().Clear(); err != nil {
+				logger.Error().Err(err).Msg("error when clearing cached states and state corruption may happen")
+			}
+		}
 		if m.ctx.cfg.EnableDummyBlock {
 			pendingBlock = m.ctx.chain.MintNewDummyBlock()
 			logger.Warn().
@@ -821,16 +826,18 @@ func (m *cFSM) processEndorseCommit(consensus bool) (fsm.State, error) {
 		}
 	}
 	if pendingBlock != nil {
-		// Commit and broadcast the pending block
-		if err := m.ctx.chain.CommitBlock(pendingBlock); err != nil {
-			logger.Error().
-				Err(err).
-				Uint64("block", pendingBlock.Height()).
-				Bool("dummy", pendingBlock.IsDummyBlock()).
-				Msg("error when committing a block")
-		}
-		// Remove transfers in this block from ActPool and reset ActPool state
-		m.ctx.actPool.Reset()
+		/*
+			// Commit and broadcast the pending block
+			if err := m.ctx.chain.CommitBlock(pendingBlock); err != nil {
+				logger.Error().
+					Err(err).
+					Uint64("block", pendingBlock.Height()).
+					Bool("dummy", pendingBlock.IsDummyBlock()).
+					Msg("error when committing a block")
+			}
+			// Remove transfers in this block from ActPool and reset ActPool state
+			m.ctx.actPool.Reset()
+		*/
 		// Broadcast the committed block to the network
 		if blkProto := pendingBlock.ConvertToBlockPb(); blkProto != nil {
 			if err := m.ctx.p2p.Broadcast(m.ctx.chain.ChainID(), blkProto); err != nil {
