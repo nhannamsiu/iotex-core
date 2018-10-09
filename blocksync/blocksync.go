@@ -96,6 +96,8 @@ func (bs *blockSyncer) Stop(ctx context.Context) error {
 
 // ProcessBlock processes an incoming latest committed block
 func (bs *blockSyncer) ProcessBlock(blk *blockchain.Block) error {
+	h := blk.Height()
+	logger.Info().Uint64("height", h).Msg("Received block on wire.")
 	if !bs.ackBlockCommit {
 		// node is not meant to handle latest committed block, simply exit
 		return nil
